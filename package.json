@@ -21,6 +21,66 @@
   "cds": {
     "sql": {
       "native_hana_associations": false
+    },
+    "requires": {
+      "auth": {
+        "kind": "basic",
+        "users": {
+          "selina": {
+            "roles": [
+              "Admin"
+            ],
+            "attr": {
+              "email": "selina.hay@example.com",
+              "department": "HR",
+              "companyCode": "*"
+            }
+          },
+          "luna": {
+            "roles": [
+              "Admin"
+            ],
+            "attr": {
+              "email": "selina.hay@example.com",
+              "department": "HR",
+              "companyCode": "DE01"
+            }
+          },
+          "haha": {
+            "roles": [
+              "Admin"
+            ],
+            "attr": {
+              "email": "haha.ha@example.com",
+              "department": "HR",
+              "companyCode": ""
+            }
+          },
+          "jame": {
+            "roles": [
+              "Viewer"
+            ],
+            "attr": {
+              "email": "jame.sec@example.com",
+              "department": "Tester"
+            }
+          },
+          "john": {
+            "roles": [
+              "Viewer"
+            ],
+            "attr": {
+              "email": "john.doe@example.com",
+              "department": "IT"
+            }
+          }
+        }
+      },
+      "[hybrid]": {
+        "auth": {
+          "kind": "xsuaa"
+        }
+      }
     }
   }
 }
