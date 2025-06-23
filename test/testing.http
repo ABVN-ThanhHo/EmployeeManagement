@@ -7,6 +7,13 @@ Authorization: Basic john:
 
 ###
 
+### Calculate Salary
+POST {{baseUrl}}/employee(e1111111-e111-4111-8111-e11111111111)/calculateSalary
+Accept: application/json
+Authorization: Basic selina:
+
+###
+
 ### Create new employee
 POST {{baseUrl}}/employee/Employees
 Content-Type: application/json

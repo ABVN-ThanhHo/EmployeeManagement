@@ -8,7 +8,8 @@
   "dependencies": {
     "@sap/cds": "^8",
     "express": "^4",
-    "@cap-js/hana": "^1"
+    "@cap-js/hana": "^1",
+    "@sap/xssec": "^4"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.10.0",
@@ -23,60 +24,62 @@
       "native_hana_associations": false
     },
     "requires": {
-      "auth": {
-        "kind": "basic",
-        "users": {
-          "selina": {
-            "roles": [
-              "Admin"
-            ],
-            "attr": {
-              "email": "selina.hay@example.com",
-              "department": "HR",
-              "companyCode": "*"
-            }
-          },
-          "luna": {
-            "roles": [
-              "Admin"
-            ],
-            "attr": {
-              "email": "selina.hay@example.com",
-              "department": "HR",
-              "companyCode": "DE01"
-            }
-          },
-          "haha": {
-            "roles": [
-              "Admin"
-            ],
-            "attr": {
-              "email": "haha.ha@example.com",
-              "department": "HR",
-              "companyCode": ""
-            }
-          },
-          "jame": {
-            "roles": [
-              "Viewer"
-            ],
-            "attr": {
-              "email": "jame.sec@example.com",
-              "department": "Tester"
-            }
-          },
-          "john": {
-            "roles": [
-              "Viewer"
-            ],
-            "attr": {
-              "email": "john.doe@example.com",
-              "department": "IT"
+      "[development]": {
+        "auth": {
+          "kind": "basic",
+          "users": {
+            "selina": {
+              "roles": [
+                "Admin"
+              ],
+              "attr": {
+                "email": "selina.hay@example.com",
+                "department": "HR",
+                "companyCode": "*"
+              }
+            },
+            "luna": {
+              "roles": [
+                "Admin"
+              ],
+              "attr": {
+                "email": "selina.hay@example.com",
+                "department": "HR",
+                "companyCode": "DE01"
+              }
+            },
+            "haha": {
+              "roles": [
+                "Admin"
+              ],
+              "attr": {
+                "email": "haha.ha@example.com",
+                "department": "HR",
+                "companyCode": ""
+              }
+            },
+            "jame": {
+              "roles": [
+                "Viewer"
+              ],
+              "attr": {
+                "email": "jame.sec@example.com",
+                "department": "Tester"
+              }
+            },
+            "john": {
+              "roles": [
+                "Viewer"
+              ],
+              "attr": {
+                "email": "john.doe@example.com",
+                "department": "IT"
+              }
             }
           }
         }
       },
-      "[hybrid]": {
+      "[production]": {
         "auth": {
           "kind": "xsuaa"
         }

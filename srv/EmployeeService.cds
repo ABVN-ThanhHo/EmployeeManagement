@@ -12,7 +12,6 @@ service EmployeeService {
         }
     ]
     entity Employees   as projection on db.Employees;
-
     @readonly
     @restrict: [{
         grant: ['READ'],
@@ -26,4 +25,7 @@ service EmployeeService {
         to   : ['any']
     }]
     entity Departments as projection on db.Departments;
-}
+    
+    // Calculate Salary
+    function calculateSalary() returns  Decimal(10,2);
+};
