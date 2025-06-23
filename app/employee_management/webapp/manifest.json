@@ -1,0 +1,140 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "employeemanagement",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.18.0",
+      "toolsId": "5b96a4e4-1fd1-4d7c-80e9-c87ff4a9ecb2"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/employee/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.136.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "employeemanagement.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "employeemanagement.view",
+        "async": true,
+        "viewPath": "employeemanagement.view",
+        "bypassed": {
+          "target": ["NotFound"]
+        }
+      },
+      "routes": [
+        {
+          "name": "OverviewPage",
+          "pattern": "",
+          "target": "OverviewPage"
+        },
+        {
+          "name": "CreateEmployee",
+          "pattern": "create",
+          "target": "CreateEmployee"
+        },
+        {
+          "name": "DetailEmployee",
+          "pattern": "detail/{id}",
+          "target": "DetailEmployee"
+        }
+      ],
+      "targets": {
+        "OverviewPage": {
+          "id": "OverviewPage",
+          "name": "OverviewPage"
+        },
+        "CreateEmployee": {
+          "id": "CreateEmployee",
+          "name": "CreateEmployee"
+        },
+        "DetailEmployee": {
+          "id": "DetailEmployee",
+          "name": "DetailEmployee"
+        },
+        "NotFound": {
+          "id": "NotFound",
+          "name": "NotFound"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "employeemanagement.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

@@ -1,0 +1,64 @@
+<mvc:View controllerName="employeemanagement.controller.DetailEmployee"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:l="sap.ui.layout"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:u="sap.ui.unified"
+  xmlns:core="sap.ui.core"
+  xmlns:upload="sap.m.upload">
+  <Page id="_IDGenPage" title="Detail Employee" class="Page">
+    <customHeader>
+      <core:Fragment fragmentName="employeemanagement.view.fragment.Header" type="XML" />
+    </customHeader>
+    <content>
+      <HBox class="content">
+        <VBox class="responsiveVBox">
+          <f:SimpleForm id="form" title="{i18n>empList}">
+            <VBox id="_IDGenVBox9" alignItems="Center">
+              <Avatar id="uploadAvatar" displayShape="Circle" displaySize="L" initials="AU" class="sapUiSmallMarginEnd" src="img/Avatar.png"/>
+            </VBox>
+            <Label id="name1" text="{i18n>name}" />
+            <Input id="name" placeholder="Name" editable="false" value="{EmployeeDetail>/name}" />
+            <Label id="gender_label" text="{i18n>gender}" />
+            <ComboBox id="gender" editable="false" value="{EmployeeDetail>/gender}">
+              <items>
+                <core:Item key="male" text="{i18n>male}"/>
+                <core:Item key="female" text="{i18n>female}"/>
+                <core:Item key="other" text="{i18n>other}"/>
+              </items>
+            </ComboBox>
+            <Label id="dob_label" text="{i18n>dob}" />
+            <DatePicker id="dob" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/dob}" />
+            <Label id="department_label" text="{i18n>department}" />
+            <ComboBox id="department" editable="false" value="{EmployeeDetail>/department}">
+              <items>
+                <core:Item key="IT" text="IT"/>
+                <core:Item key="HR" text="HR"/>
+                <core:Item key="Tester" text="Tester"/>
+              </items>
+            </ComboBox>
+            <Label id="wfrom_label" text="{i18n>wfrom}" />
+            <DatePicker id="wfrom" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/wfrom}" />
+            <Label id="level_label" text="{i18n>level}" />
+            <ComboBox id="level" editable="false" value="{EmployeeDetail>/level}">
+              <items>
+                <core:Item key="Jr.Specialist" text="Jr.Specialist"/>
+                <core:Item key="Specialist" text="Specialist"/>
+                <core:Item key="Sr.Specialist" text="Sr.Specialist"/>
+              </items>
+            </ComboBox>
+            <Label id="email_label" text="{i18n>email}" />
+            <Input id="email" editable="false" value="{EmployeeDetail>/email}" />
+            <Label text="Certificate"/>
+            <VBox id="certificatesVBox" items="{EmployeeDetail>/certificates}">
+              <Input value="{EmployeeDetail>}" editable="false" width="100%" />
+            </VBox>
+            <VBox id="button" width="100%" alignItems="End">
+              <Button id="_IDGenButton1" text="{i18n>edit}" class="customButtonPrimary sapUiTinyMarginBegin" press="onUpdate"/>
+            </VBox>
+          </f:SimpleForm>
+        </VBox>
+      </HBox>
+    </content>
+  </Page>
+</mvc:View>
