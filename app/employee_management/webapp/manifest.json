@@ -69,7 +69,17 @@
           "operationMode": "Server",
           "autoExpandSelect": true,
           "earlyRequests": true
-        }
+        },
+        "type": "sap.ui.model.odata.v4.ODataModel"
+      },
+      "EmployeeModel": {
+        "dataSource": "mainService",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true
+        },
+        "type": "sap.ui.model.odata.v4.ODataModel"
       }
     },
     "resources": {
@@ -109,6 +119,11 @@
           "name": "DetailEmployee",
           "pattern": "detail/{id}",
           "target": "DetailEmployee"
+        },
+        {
+          "name": "MasterDataPage",
+          "pattern": "masterData",
+          "target": "MasterDataPage"
         }
       ],
       "targets": {
@@ -123,6 +138,10 @@
         "DetailEmployee": {
           "id": "DetailEmployee",
           "name": "DetailEmployee"
+        },
+        "MasterDataPage": {
+          "id": "MasterDataPage",
+          "name": "MasterDataPage"
         },
         "NotFound": {
           "id": "NotFound",

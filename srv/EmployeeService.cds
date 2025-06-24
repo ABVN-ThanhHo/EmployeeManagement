@@ -11,7 +11,11 @@ service EmployeeService {
             to   : ['Viewer']
         }
     ]
-    entity Employees   as projection on db.Employees;
+    entity Employees   as projection on db.Employees {
+        *,
+        role.name as roleName,
+        department.name as departmentName
+    };
     @readonly
     @restrict: [{
         grant: ['READ'],

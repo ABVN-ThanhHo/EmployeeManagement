@@ -17,45 +17,43 @@
             <VBox id="_IDGenVBox9" alignItems="Center">
               <Avatar id="uploadAvatar" displayShape="Circle" displaySize="L" initials="AU" class="sapUiSmallMarginEnd" src="img/Avatar.png"/>
             </VBox>
-            <Label id="name1" text="{i18n>name}" />
-            <Input id="name" placeholder="Name" editable="false" value="{EmployeeDetail>/name}" />
-            <Label id="gender_label" text="{i18n>gender}" />
-            <ComboBox id="gender" editable="false" value="{EmployeeDetail>/gender}">
+            <Label id="name1" required="true" text="{i18n>firstName}" />
+            <Input id="name" required="true" placeholder="Name" editable="false" value="{EmployeeDetail>/firstName}" />
+            <Label id="name13" required="true" text="{i18n>lastName}" />
+            <Input id="name2" required="true" placeholder="Name" editable="false" value="{EmployeeDetail>/lastName}" />
+            <Label id="dob_label" required="true" text="{i18n>dob}" />
+            <DatePicker id="dob" required="true" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/dateOfBirth}" />
+            <Label id="gender_label" required="true" text="{i18n>gender}" />
+            <ComboBox id="gender" required="true" editable="false" width="100%" change="onRoleChange" value="{EmployeeDetail>/gender}">
               <items>
-                <core:Item key="male" text="{i18n>male}"/>
-                <core:Item key="female" text="{i18n>female}"/>
-                <core:Item key="other" text="{i18n>other}"/>
+                <core:Item id="_IDGenItem13" key="male" text="{i18n>male}"/>
+                <core:Item id="_IDGenItem14" key="female" text="{i18n>female}"/>
+                <core:Item id="_IDGenItem15" key="other" text="{i18n>other}"/>
               </items>
             </ComboBox>
-            <Label id="dob_label" text="{i18n>dob}" />
-            <DatePicker id="dob" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/dob}" />
-            <Label id="department_label" text="{i18n>department}" />
-            <ComboBox id="department" editable="false" value="{EmployeeDetail>/department}">
-              <items>
-                <core:Item key="IT" text="IT"/>
-                <core:Item key="HR" text="HR"/>
-                <core:Item key="Tester" text="Tester"/>
-              </items>
+            <Label id="department_label" required="true" text="{i18n>department}" />
+            <ComboBox id="department" editable="false" required="true" change="onRoleChange" value="{EmployeeDetail>/departmentName}" items="{
+                                            path: 'MasterDataModel>/departments',
+                                            sorter: { path: 'name' }
+                                        }" selectedKey="{MasterDataModel>ID}">
+              <core:Item id="_IDGenItem122" key="{MasterDataModel>ID}" text="{MasterDataModel>name}" />
             </ComboBox>
-            <Label id="wfrom_label" text="{i18n>wfrom}" />
-            <DatePicker id="wfrom" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/wfrom}" />
-            <Label id="level_label" text="{i18n>level}" />
-            <ComboBox id="level" editable="false" value="{EmployeeDetail>/level}">
-              <items>
-                <core:Item key="Jr.Specialist" text="Jr.Specialist"/>
-                <core:Item key="Specialist" text="Specialist"/>
-                <core:Item key="Sr.Specialist" text="Sr.Specialist"/>
-              </items>
+            <Label id="wfrom_label" required="true" text="{i18n>hireDate}" />
+            <DatePicker id="hireDate" required="true" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" editable="false" value="{EmployeeDetail>/hireDate}" />
+            <Label id="role_label" required="true" text="{i18n>role}" />
+            <ComboBox id="role" editable="false" required="true" value="{EmployeeDetail>/roleName}" change="onRoleChange" items="{
+                                            path: 'MasterDataModel>/roles',
+                                            sorter: { path: 'name' }
+                                        }" selectedKey="{MasterDataModel>ID}">
+              <core:Item id="_IDGenItem31" key="{MasterDataModel>ID}" text="{MasterDataModel>name}" />
             </ComboBox>
-            <Label id="email_label" text="{i18n>email}" />
-            <Input id="email" editable="false" value="{EmployeeDetail>/email}" />
-            <Label text="Certificate"/>
-            <VBox id="certificatesVBox" items="{EmployeeDetail>/certificates}">
-              <Input value="{EmployeeDetail>}" editable="false" width="100%" />
-            </VBox>
-            <VBox id="button" width="100%" alignItems="End">
-              <Button id="_IDGenButton1" text="{i18n>edit}" class="customButtonPrimary sapUiTinyMarginBegin" press="onUpdate"/>
-            </VBox>
+            <Label id="email_label" required="true" text="{i18n>email}" />
+            <Input id="email" required="true" editable="false" value="{EmployeeDetail>/email}" change="onEmailChange"/>
+            <HBox id="button" width="100%" justifyContent="End">
+              <Button id="btnEdit" text="{i18n>edit}" class="customButtonPrimary" press="onEditPress" visible="true"/>
+              <Button id="btnUpdate" text="{i18n>update}" class="customButtonPrimary sapUiTinyMarginEnd" press="onUpdatePress" visible="false"/>
+              <Button id="btnCancel" text="{i18n>cancel}" class="customButtonSecondary" press="onCancelPress" visible="false"/>
+            </HBox>
           </f:SimpleForm>
         </VBox>
       </HBox>

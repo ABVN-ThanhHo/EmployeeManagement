@@ -5,7 +5,7 @@ sap.ui.define([
   
     return Controller.extend("employeemanagement.controller.NotFound", {
       onNavHome: function () {
-        this.getOwnerComponent().getRouter().navTo("Overview");
+        this.getOwnerComponent().getRouter().navTo("OverviewPage");
       }
     });
   });

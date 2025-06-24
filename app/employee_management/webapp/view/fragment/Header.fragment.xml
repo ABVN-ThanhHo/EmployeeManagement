@@ -11,8 +11,9 @@
       <Link id="_IDGenLink" text="{i18n>title}" class="customTitleLink" press="onEmpList"/>
     </contentLeft>
     <contentRight>
-      <Button id="_IDGenButton2" text="{i18n>inputForm}" press="onInputForm" class="customButtonSecondary"/>
+      <Button id="_IDGenButton2" text="{i18n>inputForm}" press="onInputForm" class="customButtonPrimary"/>
       <Button id="_IDGenButton3" text="{i18n>empList}" press="onEmpList" class="customButtonPrimary sapUiTinyMarginBegin"/>
+      <Button id="btnMasterData" text="{i18n>masterData}" press="onMasterData" class="customButtonPrimary"/>
     </contentRight>
   </Bar>
 
