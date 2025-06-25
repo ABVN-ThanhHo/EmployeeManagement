@@ -50,4 +50,41 @@ module.exports = cds.service.impl(async function () {
 
     return totalSalary;
   });
+
+  this.after("READ", Employees, async (employees, req) => {
+    const list = Array.isArray(employees) ? employees : [employees];
+
+    // Fetch all Roles with salaries
+    const roles = await SELECT.from(Roles);
+    const roleMap = {};
+    roles.forEach((role) => (roleMap[role.ID] = role.baseSalary));
+
+    for (let emp of list) {
+      if (!emp.hireDate || !emp.role_ID) {
+        emp.salary = 0;
+        continue;
+      }
+
+      const baseSalary = roleMap[emp.role_ID] || 0;
+      const hireDate = new Date(emp.hireDate);
+      const today = new Date();
+
+      let yearsOfService = today.getFullYear() - hireDate.getFullYear();
+      const monthDiff = today.getMonth() - hireDate.getMonth();
+      const dayDiff = today.getDate() - hireDate.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        yearsOfService--;
+      }
+
+      emp.salary = baseSalary + yearsOfService * 1000;
+    }
+  });
+
+  this.on("me", (req) => {
+    return {
+      id: req.user.id,
+      roles: req.user.roles,
+    };
+  });
 });

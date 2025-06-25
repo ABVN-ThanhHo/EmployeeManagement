@@ -11,11 +11,13 @@ service EmployeeService {
             to   : ['Viewer']
         }
     ]
-    entity Employees   as projection on db.Employees {
-        *,
-        role.name as roleName,
-        department.name as departmentName
-    };
+    entity Employees   as
+        projection on db.Employees {
+            *,
+            role.name       as roleName,
+            department.name as departmentName
+        };
+
     @readonly
     @restrict: [{
         grant: ['READ'],
@@ -29,7 +31,12 @@ service EmployeeService {
         to   : ['any']
     }]
     entity Departments as projection on db.Departments;
-    
+
     // Calculate Salary
-    function calculateSalary() returns  Decimal(10,2);
+    function calculateSalary() returns Decimal(10, 2);
+    // Get user login information
+    function me()              returns {
+        id    : String;
+        roles : many String;
+    };
 };

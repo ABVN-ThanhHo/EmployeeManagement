@@ -13,6 +13,8 @@ sap.ui.define(
         // Set edit mode
         this._bEditMode = false;
         this._oOriginalData = null;
+        this._validateDobCheck = true;
+        this._validateHireCheck = true;
       },
 
       _onRouteMatched: async function (oEvent) {
@@ -33,14 +35,12 @@ sap.ui.define(
 
           if (oData) {
             // Set it into a JSONModel for the view
-            let oViewModel = this.getView().getModel("EmployeeDetail");
-            if (!oViewModel) {
-              oViewModel = new sap.ui.model.json.JSONModel();
-              this.getView().setModel(oViewModel, "EmployeeDetail");
+            let oEmployeeDetailModel =
+              this.getView().getModel("EmployeeDetail");
+            if (!oEmployeeDetailModel) {
+              const oJSONEmployee = new sap.ui.model.json.JSONModel(oData);
+              this.getView().setModel(oJSONEmployee, "EmployeeDetail");
             }
-
-            // You can enrich or transform oData here if needed
-            oViewModel.setData(oData);
           } else {
             sap.m.MessageToast.show("Employee not found.");
           }
@@ -93,11 +93,20 @@ sap.ui.define(
           JSON.stringify(oView.getModel("EmployeeDetail").getData())
         );
 
+        // Set validate check
+        this._setValidateCheck()
+
         // Enable inputs: find inputs by IDs and set editable
         this._setInputsEditable(true);
 
         // Toggle buttons visibility
         this._toggleButtons(true);
+      },
+
+      // Set validate check
+      _setValidateCheck: function () {
+        this._validateDobCheck = true;
+        this._validateHireCheck = true;
       },
 
       // Cancel editing
@@ -113,6 +122,88 @@ sap.ui.define(
 
         // Toggle buttons
         this._toggleButtons(false);
+      },
+
+      // Validate Date of birth
+      validateDOB: function (oEvent) {
+        const oDatePicker = oEvent.getSource();
+        const sDateValue = oEvent.getParameter("value");
+
+        if (!sDateValue) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Date of Birth is required.");
+          this._validateDobCheck = false;
+          return;
+        }
+
+        const dob = new Date(sDateValue);
+        const today = new Date();
+
+        // Check if input is a valid date
+        if (isNaN(dob.getTime())) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText(
+            "Invalid date format. Please enter a valid date."
+          );
+          this._validateDobCheck = false;
+          return;
+        }
+
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        const d = today.getDate() - dob.getDate();
+
+        if (m < 0 || (m === 0 && d < 0)) {
+          age--;
+        }
+
+        if (age < 18) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText(
+            "Employee must be at least 18 years old."
+          );
+          this._validateDobCheck = false;
+        } else {
+          oDatePicker.setValueState("None");
+          oDatePicker.setValueStateText("");
+          this._validateDobCheck = true;
+        }
+      },
+
+      // Validate hireDate
+      validateHireDate: function (oEvent) {
+        const oDatePicker = oEvent.getSource();
+        const sDateValue = oEvent.getParameter("value");
+
+        if (!sDateValue) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Hire Date is required.");
+          this._validateHireCheck = false;
+          return;
+        }
+
+        const hireDate = new Date(sDateValue);
+
+        // Check if the input is a valid date
+        if (isNaN(hireDate.getTime())) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Invalid Hire Date format.");
+          this._validateHireCheck = false;
+          return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (hireDate > today) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Hire Date cannot be in the future.");
+          this._validateHireCheck = false;
+        } else {
+          oDatePicker.setValueState("None");
+          oDatePicker.setValueStateText("");
+          this._validateHireCheck = true;
+        }
       },
 
       // Validate form
@@ -179,17 +270,16 @@ sap.ui.define(
           return;
         }
 
-        // Check hire date is not in future
-        const sHireDate = oView.byId("hireDate").getValue().trim();
-        if (sHireDate) {
-          const hireDate = new Date(sHireDate);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
+        // Validate Dob field
+        if (!this._validateDobCheck) {
+          sap.m.MessageToast.show("Invalid Date of Birth field.");
+          return;
+        }
 
-          if (hireDate > today) {
-            sap.m.MessageToast.show("Hire Date cannot be in the future.");
-            return;
-          }
+        // Validate HireDate field
+        if (!this._validateHireCheck) {
+          sap.m.MessageToast.show("Invalid Hire Date field.");
+          return;
         }
 
         // Check email
@@ -237,16 +327,6 @@ sap.ui.define(
         }
       },
 
-      // Convert Date
-      _convertToISODate: function (sDate) {
-        if (!sDate) return null;
-        const parts = sDate.split("-");
-        if (parts.length !== 3) return null;
-        // parts = [dd, MM, yyyy]
-        const isoDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        return isoDate; // yyyy-MM-dd
-      },
-
       // Set Dialog Properties
       _setDialogProperties: function (oParams) {
         const oDialogModel = new sap.ui.model.json.JSONModel({
@@ -263,7 +343,9 @@ sap.ui.define(
       _handleEmployeeUpdate: async function () {
         const oView = this.getView();
         const oDetailModel = oView.getModel("EmployeeDetail");
-        const oData = { ...oDetailModel.getData() };
+        // const oData = { ...oDetailModel.getData() };
+        const oData = oDetailModel.getData();
+
         const sEmployeeID = oData.ID;
 
         if (!sEmployeeID) {
@@ -274,18 +356,32 @@ sap.ui.define(
         delete oData.ID;
         delete oData.createdAt;
         delete oData.__metadata;
+        delete oData.departmentName;
+        delete oData.roleName;
+        delete oData.salary;
+        delete oData.createdBy;
+        delete oData.modifiedAt;
+        delete oData.modifiedBy;
 
-        // Convert dates to valid ISO format
+        // Convert dates to valid ISO format (YYYY-MM-DD)
         if (oData.dateOfBirth) {
           const dob = new Date(oData.dateOfBirth);
-          if (!isNaN(dob)) oData.dateOfBirth = dob.toISOString().slice(0, 10);
+          if (!isNaN(dob)) {
+            oData.dateOfBirth = dob.toISOString().slice(0, 10);
+          } else {
+            console.warn("Invalid dateOfBirth:", oData.dateOfBirth);
+          }
         }
 
         if (oData.hireDate) {
           const hireDate = new Date(oData.hireDate);
-          if (!isNaN(hireDate))
+          if (!isNaN(hireDate)) {
             oData.hireDate = hireDate.toISOString().slice(0, 10);
+          } else {
+            console.warn("Invalid hireDate:", oData.hireDate);
+          }
         }
+
         try {
           // Use correct OData format
           const sUrl = `/odata/v4/employee/Employees('${sEmployeeID}')`;
@@ -328,7 +424,7 @@ sap.ui.define(
         this._oConfirmDialog.close();
       },
 
-      // Utility: enable/disable inputs by ID
+      // Enable/disable inputs by ID
       _setInputsEditable: function (bEditable) {
         const oView = this.getView();
         [
@@ -354,6 +450,7 @@ sap.ui.define(
         oView.byId("btnEdit").setVisible(!bEditMode);
         oView.byId("btnUpdate").setVisible(bEditMode);
         oView.byId("btnCancel").setVisible(bEditMode);
+        oView.byId("btnCalculateSalary").setEnabled(bEditMode);
       },
 
       // Utility: refresh employee detail model data after update
@@ -403,6 +500,52 @@ sap.ui.define(
           );
           oComboBox.setSelectedKey(""); // clear invalid key
         }
+      },
+
+      // Calculate Salary
+      onCalculateSalary: function () {
+        const oView = this.getView();
+        const oComboBox = oView.byId("role");
+        const oDatePicker = oView.byId("hireDate");
+
+        const sSelectedRoleId = oComboBox.getSelectedKey();
+        const oHireDate = oDatePicker.getDateValue(); // JS Date object
+
+        if (!sSelectedRoleId || !oHireDate) {
+          sap.m.MessageBox.information("Please select a role and hire date.");
+          return;
+        }
+
+        const oRoles = this.getView()
+          .getModel("MasterDataModel")
+          .getProperty("/roles");
+
+        // Find the selected role by ID
+        const oSelectedRole = oRoles.find(
+          (role) => role.ID === sSelectedRoleId
+        );
+        if (!oSelectedRole) {
+          sap.m.MessageBox.information("Selected role not found.");
+          return;
+        }
+
+        const baseSalary = parseFloat(oSelectedRole.baseSalary || 0);
+        const today = new Date();
+        let years = today.getFullYear() - oHireDate.getFullYear();
+
+        // Adjust for month/day
+        const monthDiff = today.getMonth() - oHireDate.getMonth();
+        const dayDiff = today.getDate() - oHireDate.getDate();
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          years--;
+        }
+
+        const bonus = years * 1000;
+        const totalSalary = baseSalary + bonus;
+
+        // Update EmployeeDetail model
+        const oEmployeeModel = this.getView().getModel("EmployeeDetail");
+        oEmployeeModel.setProperty("/salary", totalSalary.toFixed(2));
       },
     });
   }

@@ -80,6 +80,11 @@
           "autoExpandSelect": true
         },
         "type": "sap.ui.model.odata.v4.ODataModel"
+      },
+      "userLoginModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "",
+        "settings": {}
       }
     },
     "resources": {

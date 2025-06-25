@@ -91,6 +91,26 @@ sap.ui.define(
           groupId: "employeeUpdateGroup",
         });
       },
+
+      // Get user login
+      createUserModel: function () {
+        return new Promise(function (resolve, reject) {
+          var oModel = new JSONModel();
+
+          $.ajax({
+            url: "/odata/v4/employee/me", 
+            method: "GET",
+            success: function (data) {
+              oModel.setData(data);
+              resolve(oModel);
+            },
+            error: function (err) {
+              console.error("Failed to load user info", err);
+              reject(err);
+            },
+          });
+        });
+      },
     };
   }
 );

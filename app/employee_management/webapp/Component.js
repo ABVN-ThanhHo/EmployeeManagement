@@ -1,6 +1,10 @@
 sap.ui.define(
-  ["sap/ui/core/UIComponent", "employeemanagement/model/models"],
-  (UIComponent, models) => {
+  [
+    "sap/ui/core/UIComponent",
+    "sap/ui/model/json/JSONModel",
+    "employeemanagement/model/models",
+  ],
+  (UIComponent, JSONModel, models) => {
     "use strict";
 
     return UIComponent.extend("employeemanagement.Component", {
@@ -13,6 +17,15 @@ sap.ui.define(
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
 
+        // Load user login model
+        try {
+          const userModel = await models.createUserModel();
+          this.setModel(userModel, "userLoginModel"); 
+        } catch (err) {
+          console.error("Failed to load user model:", err);
+          this.setModel(new JSONModel({ roles: {} }), "userLoginModel"); 
+        }
+        
         // Load master data model
         const masterDataModel = await models.createMasterDataModel();
         this.setModel(masterDataModel, "MasterDataModel");

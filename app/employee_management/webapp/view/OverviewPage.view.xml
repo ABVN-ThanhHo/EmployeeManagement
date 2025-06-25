@@ -20,7 +20,7 @@
                                         <ComboBox id="levelFilter" selectionChange="onFilterChange" width="12rem" items="{
                                             path: 'FilterModel>/roles',
                                             sorter: { path: 'name' }
-                                        }" selectedKey="{FilterModel>selectedRole}">
+                                        }" selectedKey="{FilterModel>/roles>/ID}">
                                             <core:Item id="_IDGenItem" key="{FilterModel>ID}" text="{FilterModel>name}" />
                                         </ComboBox>
                                     </VBox>
@@ -29,7 +29,7 @@
                                         <ComboBox id="levelFilter2" selectionChange="onFilterChange" width="12rem" items="{
                                             path: 'FilterModel>/departments',
                                             sorter: { path: 'name' }
-                                        }" selectedKey="{FilterModel>selectedDepartment}">
+                                        }" selectedKey="{FilterModel>/departments>/ID}">
                                             <core:Item id="_IDGenItem2" key="{FilterModel>ID}" text="{FilterModel>name}" />
                                         </ComboBox>
                                     </VBox>
@@ -55,12 +55,6 @@
                                         <Column id="_IDGenColumn1">
                                             <Text id="_IDGenText1" text="{i18n>lastName}"/>
                                         </Column>
-                                        <Column id="_IDGenColumn5">
-                                            <Text id="_IDGenText5" text="{i18n>dob}"/>
-                                        </Column>
-                                        <Column id="_IDGenColumn4">
-                                            <Text id="_IDGenText4" text="{i18n>gender}"/>
-                                        </Column>
                                         <Column id="_IDGenColumn2">
                                             <Text id="_IDGenText2" text="{i18n>email}"/>
                                         </Column>
@@ -73,7 +67,7 @@
                                         <Column id="_IDGenColumn7">
                                             <Text id="_IDGenText7" text="{i18n>department}"/>
                                         </Column>
-                                        <Column id="actionColumn">
+                                        <Column id="actionColumn" visible="true" >
                                             <Text id="_IDGenText10" text="{i18n>action}" />
                                         </Column>
                                     </columns>
@@ -82,15 +76,13 @@
                                             <cells>
                                                 <Text id="_IDGenText8" text="{EmployeeModel>firstName}"/>
                                                 <Text id="_IDGenText16" text="{EmployeeModel>lastName}"/>
-                                                <Text id="_IDGenText12" text="{EmployeeModel>dateOfBirth}"/>
-                                                <Text id="_IDGenText11" text="{EmployeeModel>gender}"/>
                                                 <Text id="_IDGenText9" text="{EmployeeModel>email}"/>
                                                 <Text id="_IDGenText15" text="{EmployeeModel>roleName}"/>
                                                 <Text id="_IDGenText13" text="{EmployeeModel>hireDate}"/>
                                                 <Text id="_IDGenText14" text="{EmployeeModel>departmentName}"/>
-                                                <HBox id="_IDGenHBox2">
-                                                    <Button icon="sap-icon://display" tooltip="{i18n>viewDetails}" press="onItemPress" class="customButtonSecondary" type="Transparent" />
-                                                    <Button icon="sap-icon://delete" tooltip="{i18n>delete}" press="onDeleteEmployeePress" class="customButtonPrimary sapUiTinyMarginBegin" type="Transparent" />
+                                                <HBox id="_IDGenHBox2" visible="true" >
+                                                    <Button id="editButton" icon="sap-icon://display" tooltip="{i18n>viewDetails}" press="onItemPress" class="customButtonSecondary" type="Transparent"/>
+                                                    <Button id="deleteButton" icon="sap-icon://delete" tooltip="{i18n>delete}" press="onDeleteEmployeePress" class="customButtonPrimary sapUiTinyMarginBegin" type="Transparent"/>
                                                 </HBox>
                                             </cells>
                                         </ColumnListItem>

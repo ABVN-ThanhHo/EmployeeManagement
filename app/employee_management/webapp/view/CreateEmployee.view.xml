@@ -23,7 +23,7 @@
             <Label id="name12" required="true" text="{i18n>lastName}" />
             <Input id="name121" placeholder="Last Name" required="true" />
             <Label id="dob_label1" required="true" text="{i18n>dob}" />
-            <DatePicker id="dob1" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" placeholder="e.g. 25-12-2025" editable="true" />
+            <DatePicker id="dob1" change="validateDOB" displayFormat="yyy-MM-dd" valueFormat="yyy-MM-dd" placeholder="e.g. 25-12-2002" editable="true" />
             <Label id="gender_label1" required="true" text="{i18n>gender}" />
             <ComboBox id="gender1" required="true" change="onRoleChange" width="100%">
               <items>
@@ -40,7 +40,7 @@
               <core:Item id="_IDGenItem12" key="{MasterDataModel>ID}" text="{MasterDataModel>name}" />
             </ComboBox>
             <Label id="wfrom_label1" required="true" text="{i18n>hireDate}" />
-            <DatePicker id="wfrom1" change="handleChange4" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" placeholder="e.g. 25-12-2025" value="" editable="true" />
+            <DatePicker id="wfrom1" change="validateHireDate" displayFormat="yyy-MM-dd" valueFormat="yyy-MM-dd" placeholder="e.g. 25-12-2020" value="" editable="true" />
             <Label id="level_label1" required="true" text="{i18n>role}" />
             <ComboBox id="role1" required="true" change="onRoleChange" items="{
                                             path: 'MasterDataModel>/roles',

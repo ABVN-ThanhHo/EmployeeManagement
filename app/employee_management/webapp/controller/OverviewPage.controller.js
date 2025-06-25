@@ -4,13 +4,24 @@ sap.ui.define(
     "sap/m/MessageBox",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
+    "../model/models",
   ],
-  (Controller, MessageBox, MessageToast, Fragment) => {
+  (Controller, MessageBox, MessageToast, Fragment, Model) => {
     "use strict";
 
     return Controller.extend("employeemanagement.controller.OverviewPage", {
       onInit() {
         const oView = this.getView();
+
+        // Get user login model
+        const oUserModel = this.getOwnerComponent().getModel("userLoginModel");
+        const roles = Object.keys(oUserModel.getData().roles || {});
+
+        if (roles.includes("Viewer")) {
+          this.byId("actionColumn")?.setVisible(false);
+          this.byId("_IDGenHBox2")?.setVisible(false);
+          this.byId("_IDGenColumnListItem").setType("Inactive");
+        }
 
         // Get MasterDataModel
         const oMasterDataModel = oView.getModel("MasterDataModel");
@@ -41,6 +52,7 @@ sap.ui.define(
           selectedRole: "All",
           selectedDepartment: "All",
         });
+        
         oView.setModel(oFilterModel, "FilterModel");
       },
 
@@ -170,55 +182,21 @@ sap.ui.define(
       },
 
       // Filter function
-      // onFilterChange: function () {
-      //   const oView = this.getView();
-      //   const oTable = oView.byId("employeeTable");
-
-      //   const sRoleId = oView.byId("levelFilter").getSelectedKey();
-      //   const sDeptId = oView.byId("levelFilter2").getSelectedKey();
-
-      //   const aFilters = [];
-
-      //   if (sRoleId !== "All") {
-      //     aFilters.push(
-      //       new sap.ui.model.Filter(
-      //         "role_ID",
-      //         sap.ui.model.FilterOperator.EQ,
-      //         sRoleId
-      //       )
-      //     );
-      //   }
-
-      //   if (sDeptId !== "All") {
-      //     aFilters.push(
-      //       new sap.ui.model.Filter(
-      //         "department_ID",
-      //         sap.ui.model.FilterOperator.EQ,
-      //         sDeptId
-      //       )
-      //     );
-      //   }
-
-      //   const oBinding = oTable.getBinding("items");
-      //   if (oBinding) {
-      //     oBinding.filter(aFilters);
-      //   }
-      // },
-
       onFilterChange: function () {
         const oView = this.getView();
         const oTable = oView.byId("employeeTable");
         const oFilterModel = oView.getModel("FilterModel");
+        console.log(oFilterModel);
 
-        const sRoleId = oFilterModel.getProperty("/selectedRole");
-        const sDeptId = oFilterModel.getProperty("/selectedDepartment");
+        const sRoleId = oView.byId("levelFilter").getSelectedKey();
+        const sDeptId = oView.byId("levelFilter2").getSelectedKey();
 
         const aFilters = [];
 
-        if (sRoleId !== "All") {
+        if (sRoleId && sRoleId !== "All") {
           aFilters.push(new sap.ui.model.Filter("role_ID", "EQ", sRoleId));
         }
-        if (sDeptId !== "All") {
+        if (sDeptId && sDeptId !== "All") {
           aFilters.push(
             new sap.ui.model.Filter("department_ID", "EQ", sDeptId)
           );

@@ -14,8 +14,15 @@ Authorization: Basic john:
 
 ###
 
+### Get user login information
+GET {{baseUrl}}/employee/me
+Accept: application/json
+Authorization: Basic selina:
+
+###
+
 ### Calculate Salary
-POST {{baseUrl}}/employee(e1111111-e111-4111-8111-e11111111111)/calculateSalary
+GET {{baseUrl}}/employee(e1111111-e111-4111-8111-e11111111111)/calculateSalary
 Accept: application/json
 Authorization: Basic selina:
 

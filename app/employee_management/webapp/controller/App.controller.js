@@ -2,7 +2,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], (BaseController) => {
   "use strict";
 
   return BaseController.extend("employeemanagement.controller.App", {
-    onInit() {},
+    onInit() {
+      // Check user login
+      const oUserModel = this.getOwnerComponent().getModel("userLoginModel");
+      const roles = Object.keys(oUserModel.getData().roles || {});
+
+      if (roles.includes("Admin")) {
+        this.byId("inputForm")?.setVisible(false);
+      }
+    },
 
     onNavToOverview: function () {
       this.getOwnerComponent().getRouter().navTo("OverviewPage");

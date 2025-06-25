@@ -11,6 +11,10 @@ sap.ui.define(
           }),
           "viewModel"
         );
+
+        // Set validate check
+        this._validateDobCheck = true;
+        this._validateHireCheck = true;
       },
 
       // Press Input Form button
@@ -76,6 +80,88 @@ sap.ui.define(
         }
       },
 
+      // Validate Date of birth
+      validateDOB: function (oEvent) {
+        const oDatePicker = oEvent.getSource();
+        const sDateValue = oEvent.getParameter("value");
+
+        if (!sDateValue) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Date of birth is required.");
+          this._validateDobCheck = false;
+          return;
+        }
+
+        const dob = new Date(sDateValue);
+        const today = new Date();
+
+        // Check if input is a valid date
+        if (isNaN(dob.getTime())) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText(
+            "Invalid date format. Please enter a valid date."
+          );
+          this._validateDobCheck = false;
+          return;
+        }
+
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        const d = today.getDate() - dob.getDate();
+
+        if (m < 0 || (m === 0 && d < 0)) {
+          age--;
+        }
+
+        if (age < 18) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText(
+            "Employee must be at least 18 years old."
+          );
+          this._validateDobCheck = false;
+        } else {
+          oDatePicker.setValueState("None");
+          oDatePicker.setValueStateText("");
+          this._validateDobCheck = true;
+        }
+      },
+
+      // Validate hireDate
+      validateHireDate: function (oEvent) {
+        const oDatePicker = oEvent.getSource();
+        const sDateValue = oEvent.getParameter("value");
+
+        if (!sDateValue) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Hire Date is required.");
+          this._validateHireCheck = false;
+          return;
+        }
+
+        const hireDate = new Date(sDateValue);
+
+        // Check if the input is a valid date
+        if (isNaN(hireDate.getTime())) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Invalid Hire Date format.");
+          this._validateHireCheck = false;
+          return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (hireDate > today) {
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Hire Date cannot be in the future.");
+          this._validateHireCheck = false;
+        } else {
+          oDatePicker.setValueState("None");
+          oDatePicker.setValueStateText("");
+          this._validateHireCheck = true;
+        }
+      },
+
       // Validate email
       _validateEmail: function (email) {
         // Simple email regex
@@ -122,16 +208,16 @@ sap.ui.define(
           return;
         }
 
-        const sHireDate = this.byId("wfrom1").getValue().trim();
-        // Check hire Date in the past
-        if (sHireDate) {
-          const hireDate = new Date(sHireDate);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // remove time
-          if (hireDate > today) {
-            sap.m.MessageToast.show("Hire Date cannot be in the future.");
-            return;
-          }
+        // Validate Dob field
+        if (!this._validateDobCheck) {
+          sap.m.MessageToast.show("Invalid Date of Birth field.");
+          return;
+        }
+
+        // Validate HireDate field
+        if (!this._validateHireCheck) {
+          sap.m.MessageToast.show("Invalid Hire Date field.");
+          return;
         }
 
         // Check email
@@ -192,14 +278,22 @@ sap.ui.define(
         this._oConfirmDialog.setModel(oDialogModel, "dialog");
       },
 
+      // Set validate check
+      _setValidateCheck: function () {
+        this._validateDobCheck = true;
+        this._validateHireCheck = true;
+      },
+
       // On confirm Update
       onConfirm: function () {
         this.onConfirmSubmit();
+        this._setValidateCheck();
       },
 
       // On confirm close Update
       onCancel: function () {
         this._oConfirmDialog.close();
+        this._setValidateCheck();
       },
 
       // Press OK in Confirm dialog
@@ -226,7 +320,6 @@ sap.ui.define(
           role_ID: oView.byId("role1").getSelectedKey(),
           department_ID: oView.byId("department1").getSelectedKey(),
         };
-        console.log(oNewEmployee);
 
         try {
           const oBinding = oModel.bindList("/Employees");
